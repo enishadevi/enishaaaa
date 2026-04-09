@@ -1,0 +1,25 @@
+name: Production Deployment
+
+on:
+  push:
+    branches: [ main ]  # Only runs when code is pushed to main
+
+jobs:
+  deploy-job:
+    runs-on: ubuntu-latest
+    # This 'environment' name must match the name you just created
+    environment: production 
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Use Secrets and Variables
+        run: |
+          echo "Connecting to: ${{ vars.API_URL }}"
+          # The secret is masked in logs automatically
+          echo "Using Token: ${{ secrets.API_TOKEN }}" 
+        env:
+          # Mapping them to local env variables for scripts to use
+          API_URL: ${{ vars.API_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
